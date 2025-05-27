@@ -26,11 +26,11 @@ public class ShoppingCartQuantityAndTotalSteps {
 
     @Given("^Test item is added to shopping cart$")
     public void productAddedToShoppingCartForTests() throws Exception{
-        wait = (WebDriverWait) new WebDriverWait(driver, Duration.ofSeconds(10)).ignoring(StaleElementReferenceException.class);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         driver.findElement(By.className("qty-input")).clear();
         driver.findElement(By.className("qty-input")).sendKeys("3");
         driver.findElement(By.className("add-to-cart-button")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id("success")));
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("success")));
     }
 
     @And("^I am on the shopping cart page$")
