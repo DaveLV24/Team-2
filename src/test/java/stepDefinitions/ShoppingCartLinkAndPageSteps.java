@@ -2,12 +2,16 @@ package stepDefinitions;
 
 import hooks.Hooks;
 import io.cucumber.java.en.*;
+import io.cucumber.java.sl.In;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -54,7 +58,7 @@ public class ShoppingCartLinkAndPageSteps {
     }
 
     @And("^Shopping cart link value is (\\d+)$")
-    public void linkValueWithEmptyCartTest(int number){
+    public void linkValueShoppingCart(int number){
         assertTrue(driver.findElement(By.className("cart-qty")).getText().equals("("+number+")"));
     }
 
@@ -83,5 +87,57 @@ public class ShoppingCartLinkAndPageSteps {
         wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         driver.findElement(By.className("add-to-cart-button")).click();
         wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("success")));
+    }
+
+    @Given("^Multiple test products with given names and quantities are added to cart:$")
+    public void addingMultipleItemsToShoppingCart(Map<String,Integer> items){
+        for(Map.Entry<String, Integer> item : items.entrySet()){
+            driver.get("https://demowebshop.tricentis.com/"+item.getKey());
+            insertItemQuantity(item.getValue());
+            addToCartButtonPress();
+        }
+    }
+
+    @When("^I input new quantity values for products in cart:$")
+    public void insertingMultipleQuantities(List<String> quantities){
+        List<WebElement> items =  driver.findElements(By.className("cart-item-row"));
+        for(WebElement item : items){
+            item.findElement(By.className("qty-input")).clear();
+            item.findElement(By.className("qty-input")).sendKeys(quantities.get(items.indexOf(item)));
+        }
+    }
+
+    @Then("^Quantities of items is bigger than initial values:$")
+    public void checkingMultipleValuesIncreased(List<Integer> oldQuantities){
+        List<WebElement> items =  driver.findElements(By.className("cart-item-row"));
+        for(WebElement item : items){
+            assertTrue(Integer.parseInt(item.findElement(By.className("qty-input")).getAttribute("value"))>oldQuantities.get(items.indexOf(item)));
+        }
+    }
+
+    @And("^Total with multiple values is calculated correctly$")
+    public void totalPriceWithMultipleItemsCalculation(){
+        //These variables are not necessary they just improve readability
+        double unitPrice;
+        int quantity;
+        double expectedTotal=0;
+        double actualTotal = Double.parseDouble(driver.findElement(By.cssSelector(".order-total strong")).getText());
+        List<WebElement> items =  driver.findElements(By.className("cart-item-row"));
+        for(WebElement item : items){
+            unitPrice = Double.parseDouble(item.findElement(By.className("product-unit-price")).getText());
+            quantity = Integer.parseInt(item.findElement(By.className("qty-input")).getAttribute("value"));
+            expectedTotal+=unitPrice*quantity;
+        }
+        assertEquals(expectedTotal, actualTotal, 0.01);
+    }
+
+    @And("^Shopping cart link value equals sum of all quantities$")
+    public void linkValueMultipleItemsShoppingCart(){
+        List<WebElement> items =  driver.findElements(By.className("cart-item-row"));
+        int sum=0;
+        for(WebElement item : items){
+            sum+=Integer.parseInt(item.findElement(By.className("qty-input")).getAttribute("value"));
+        }
+        linkValueShoppingCart(sum);
     }
 }
