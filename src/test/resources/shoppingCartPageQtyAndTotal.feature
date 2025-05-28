@@ -20,6 +20,21 @@ Feature: Shopping cart item quantity functionality and total price calculations
     |7     |
     |13    |
 
+  @TC-408
+  Scenario Outline: Decrease item quantity
+    When I input <number> as new quantity value
+    And I click update shopping cart button
+    Then Quantity of item is smaller than previous and equals <number>
+    And Total price is calculated correctly
+    And Shopping cart link value is <number>
+
+    #Examples should be smaller than initial quantity of test item
+    Examples:
+    |number|
+    |3     |
+    |2     |
+    |1     |
+
   @TC-409
   Scenario: Zero is inserted as item quantity
     When I input 0 as new quantity value

@@ -21,7 +21,7 @@ public class ShoppingCartQuantityAndTotalSteps {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    private final int testItemQuantity = 3; // Change test items quantity
+    private final int testItemQuantity = 4; // Change test items quantity
     public ShoppingCartQuantityAndTotalSteps() {
         this.driver = Hooks.driver;
     }
@@ -78,6 +78,12 @@ public class ShoppingCartQuantityAndTotalSteps {
         double unitPrice = Double.parseDouble(driver.findElement(By.className("product-unit-price")).getText());
         int quantity = Integer.parseInt(driver.findElement(By.className("qty-input")).getAttribute("value"));
         double actualTotal = Double.parseDouble(driver.findElement(By.cssSelector(".order-total strong")).getText());
-        assertEquals((unitPrice*quantity), actualTotal);
+        assertEquals((unitPrice*quantity), actualTotal, 0.01);
+    }
+
+    @Then("^Quantity of item is smaller than previous and equals (\\d+)$")
+    public void checkNewQuantitySmaller(int number){
+        assertTrue(testItemQuantity>number);
+        assertTrue(driver.findElement(By.className("qty-input")).getAttribute("value").equals(Integer.toString(number)));
     }
 }
