@@ -2,27 +2,21 @@ package stepDefinitions;
 
 import hooks.Hooks;
 import io.cucumber.java.en.*;
-import io.cucumber.java.sl.In;
 import org.openqa.selenium.By;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 import static org.junit.Assert.*;
 
-public class ShoppingCartQuantityAndTotalSteps {
+public class ShoppingCartLinkAndPageSteps {
     private WebDriver driver;
     private WebDriverWait wait;
 
     private final int testItemQuantity = 4; // Change test items quantity
-    public ShoppingCartQuantityAndTotalSteps() {
+    public ShoppingCartLinkAndPageSteps() {
         this.driver = Hooks.driver;
     }
 
@@ -33,11 +27,8 @@ public class ShoppingCartQuantityAndTotalSteps {
 
     @Given("^Test item is added to shopping cart$")
     public void productAddedToShoppingCartForTests() throws Exception{
-        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        driver.findElement(By.className("qty-input")).clear();
-        driver.findElement(By.className("qty-input")).sendKeys(Integer.toString(testItemQuantity));
-        driver.findElement(By.className("add-to-cart-button")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("success")));
+        insertItemQuantity(testItemQuantity);
+        addToCartButtonPress();
     }
 
     @And("^I am on the shopping cart page$")
@@ -85,5 +76,12 @@ public class ShoppingCartQuantityAndTotalSteps {
     public void checkNewQuantitySmaller(int number){
         assertTrue(testItemQuantity>number);
         assertTrue(driver.findElement(By.className("qty-input")).getAttribute("value").equals(Integer.toString(number)));
+    }
+
+    @And("^I click add to cart button$")
+    public void addToCartButtonPress(){
+        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        driver.findElement(By.className("add-to-cart-button")).click();
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("success")));
     }
 }
