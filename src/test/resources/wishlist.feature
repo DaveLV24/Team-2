@@ -10,6 +10,20 @@ Feature: Wishlist functionality
   @TC-309
   Scenario: Remove item from wishlist and verify update
     Given User is logged in
+    When User adds a product to the wishlist
     And User navigates to the wishlist page
     When User removes an item from the wishlist
+    Then The wishlist should be updated and not contain the removed item
+
+    @TC-310
+  Scenario: Remove multiple selected items from wishlist
+    Given User is logged in
+    And User adds the following items to the wishlist:
+      | Smartphone  |
+      | 50's Rockabilly Polka Dot Top JR Plus Size |
+    When User opens the wishlist page
+    And User selects the following items to remove:
+      | Smartphone  |
+      | 50's Rockabilly Polka Dot Top JR Plus Size |
+    And User updates the wishlist
     Then The wishlist should be updated and not contain the removed item
