@@ -123,6 +123,36 @@ public WishlistSteps() {
 
         System.out.println("✅ Item successfully added to cart from wishlist.");
     }
+    @When("User selects the following items to add to cart:")
+    public void user_selects_multiple_items_to_add_to_cart(io.cucumber.datatable.DataTable dataTable) {
+        List<String> products = dataTable.asList();
+
+        for (String product : products) {
+            WebElement row = driver.findElement(By.xpath("//td[@class='product']/a[contains(text(),\"" + product + "\")]/ancestor::tr"));
+            WebElement checkbox = row.findElement(By.name("addtocart"));
+            checkbox.click();
+        }
+    }
+
+    @And("User clicks the Add to Cart button from wishlist")
+    public void user_clicks_add_to_cart_from_wishlist() {
+        WebElement addToCartBtn = driver.findElement(By.name("addtocartbutton"));
+        addToCartBtn.click();
+    }
+
+    @Then("The selected items should appear in the shopping cart:")
+    public void selected_items_should_be_in_cart(io.cucumber.datatable.DataTable dataTable) {
+        driver.findElement(By.linkText("Shopping cart")).click();
+
+        List<String> expectedItems = dataTable.asList();
+        String pageSource = driver.getPageSource();
+
+        for (String item : expectedItems) {
+            assertTrue("Item not found in cart: " + item, pageSource.contains(item));
+        }
+
+        System.out.println("All selected items successfully added to cart from wishlist.");
+    }
 
 
 
