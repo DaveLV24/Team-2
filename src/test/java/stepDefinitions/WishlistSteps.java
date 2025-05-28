@@ -154,6 +154,47 @@ public WishlistSteps() {
         System.out.println("All selected items successfully added to cart from wishlist.");
     }
 
+    @When("User selects the following items to add to cart using update wishlist:")
+    public void select_items_for_cart_via_update(io.cucumber.datatable.DataTable dataTable) {
+        List<String> items = dataTable.asList();
+        for (String item : items) {
+            WebElement row = driver.findElement(By.xpath("//td[@class='product']/a[contains(text(),\"" + item + "\")]/ancestor::tr"));
+            row.findElement(By.name("addtocart")).click();  // Tick "Add to cart" checkbox
+        }
+    }
+
+    @And("User updates the wishlist via button")
+    public void update_wishlist_button_click() {
+        driver.findElement(By.name("updatecart")).click();
+    }
+
+    @Then("The selected items should appear in the shopping cart via update:")
+    public void validate_items_in_cart_from_update(io.cucumber.datatable.DataTable dataTable) {
+        driver.findElement(By.linkText("Shopping cart")).click();  // Go to cart
+
+        List<String> expectedItems = dataTable.asList();
+        String cartPage = driver.getPageSource();
+
+        for (String item : expectedItems) {
+            System.out.println("Checking if cart contains: " + item);
+            System.out.println("Cart Page HTML Snippet: " + cartPage.substring(0, Math.min(500, cartPage.length())));
+            assertTrue("Item not found in cart: " + item, cartPage.contains(item));
+        }
+
+        System.out.println("All selected items via update wishlist were added to the cart.");
+    }
+
+    @And("User selects the following items for cart via update button:")
+    public void select_items_to_add_to_cart(io.cucumber.datatable.DataTable dataTable) {
+        List<String> products = dataTable.asList();
+        for (String product : products) {
+            WebElement row = driver.findElement(By.xpath("//td[@class='product']/a[contains(text(),\"" + product + "\")]/ancestor::tr"));
+            WebElement checkbox = row.findElement(By.name("addtocart"));
+            if (!checkbox.isSelected()) {
+                checkbox.click();
+            }
+        }
+    }
 
 
 }

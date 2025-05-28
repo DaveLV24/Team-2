@@ -52,3 +52,16 @@ Feature: Wishlist functionality
     Then The selected items should appear in the shopping cart:
       | Smartphone |
       | Phone Cover |
+
+
+  @TC-313
+  Scenario: Validate functionality of “Add to cart” checkbox via update wishlist
+    Given User is logged in
+    And User adds the following items to the wishlist:
+      | Phone Cover |
+    When User opens the wishlist page
+    And User selects the following items for cart via update button:
+      | Phone Cover     |
+    And User updates the wishlist
+    Then The selected items should appear in the shopping cart:
+      | Phone Cover |
