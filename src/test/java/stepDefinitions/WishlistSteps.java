@@ -3,6 +3,11 @@ import hooks.Hooks;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
 import static org.junit.Assert.*;
 
 public class WishlistSteps {
@@ -41,4 +46,26 @@ public WishlistSteps() {
         assertNotNull(title);
         assertFalse(title.contains("Error"));
     }
+
+    @When("User removes an item from the wishlist")
+    public void user_removes_item_from_wishlist() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name^='removefromcart']")));
+        WebElement removeCheckbox = driver.findElement(By.cssSelector("input[name^='removefromcart']"));
+        removeCheckbox.click();
+        WebElement updateButton = driver.findElement(By.name("updatecart"));
+        updateButton.click();
+    }
+
+    @Then("The wishlist should be updated and not contain the removed item")
+    public void wishlist_should_be_updated() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        boolean isWishlistEmpty = driver.getPageSource().contains("The wishlist is empty!");
+        boolean isItemRemoved = driver.findElements(By.cssSelector("td.product")).isEmpty();
+
+        assertTrue("Wishlist was not updated after removing the item", isWishlistEmpty || isItemRemoved);
+    }
+
+
+
 }
