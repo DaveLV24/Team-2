@@ -27,3 +27,13 @@ Feature: Wishlist functionality
       | 50's Rockabilly Polka Dot Top JR Plus Size |
     And User updates the wishlist
     Then The wishlist should be updated and not contain the removed item
+
+      @TC-311
+    Scenario: Add item to Cart from Wish List
+      Given User is logged in
+      And User adds the following items to the wishlist:
+        | Smartphone |
+      When User opens the wishlist page
+      And User selects an item in wishlist to add to cart
+      And User clicks the Add to Cart button
+      Then The item should appear in the shopping cart

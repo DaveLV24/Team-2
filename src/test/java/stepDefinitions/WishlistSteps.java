@@ -99,6 +99,30 @@ public WishlistSteps() {
                 By.xpath("//td[@class='product']/a[contains(text(), 'Rockabilly')]")
         ));
     }
+    @When("User selects an item in wishlist to add to cart")
+    public void user_selects_item_to_add_to_cart() {
+        WebElement checkbox = driver.findElement(By.name("addtocart"));
+        checkbox.click();
+    }
+
+    @And("User clicks the Add to Cart button")
+    public void user_clicks_add_to_cart() {
+        WebElement addToCartBtn = driver.findElement(By.name("addtocartbutton"));
+        addToCartBtn.click();
+    }
+
+    @Then("The item should appear in the shopping cart")
+    public void verify_item_in_cart() {
+
+        driver.findElement(By.linkText("Shopping cart")).click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement cartTable = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".cart")));
+        List<WebElement> items = driver.findElements(By.cssSelector(".cart td.product"));
+        assertFalse("Cart is empty, item was not added", items.isEmpty());
+
+        System.out.println("✅ Item successfully added to cart from wishlist.");
+    }
 
 
 
