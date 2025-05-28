@@ -1,6 +1,7 @@
 package stepDefinitions;
 
 import hooks.Hooks;
+import io.cucumber.java.an.E;
 import io.cucumber.java.en.*;
 import io.cucumber.java.sl.In;
 import org.openqa.selenium.By;
@@ -47,7 +48,7 @@ public class ShoppingCartLinkAndPageSteps {
     }
 
     @And("^I click update shopping cart button$")
-    public void updateShoppingCartButtonPress(){
+    public void updateShoppingCartButtonPress() {
         driver.findElement(By.className("update-cart-button")).click();
     }
 
@@ -107,7 +108,7 @@ public class ShoppingCartLinkAndPageSteps {
         }
     }
 
-    @Then("^Quantities of items is bigger than initial values:$")
+    @Then("^Quantities of items are bigger than initial values:$")
     public void checkingMultipleValuesIncreased(List<Integer> oldQuantities){
         List<WebElement> items =  driver.findElements(By.className("cart-item-row"));
         for(WebElement item : items){
@@ -139,5 +140,13 @@ public class ShoppingCartLinkAndPageSteps {
             sum+=Integer.parseInt(item.findElement(By.className("qty-input")).getAttribute("value"));
         }
         linkValueShoppingCart(sum);
+    }
+
+    @Then("^Quantities of items are smaller than initial values:$")
+    public void checkingMultipleValuesDecreased(List<Integer> oldQuantities){
+        List<WebElement> items =  driver.findElements(By.className("cart-item-row"));
+        for(WebElement item : items){
+            assertTrue(Integer.parseInt(item.findElement(By.className("qty-input")).getAttribute("value"))<oldQuantities.get(items.indexOf(item)));
+        }
     }
 }

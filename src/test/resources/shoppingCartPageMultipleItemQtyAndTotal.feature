@@ -9,14 +9,30 @@ Feature: Shopping cart when multiple items are added quantity functionality and 
 
     @TC-410
     Scenario: Increase all item quantities
+      #Inputted quantities should be bigger than initial values
       When I input new quantity values for products in cart:
       |13|
       |37|
       |69|
       And I click update shopping cart button
-      Then Quantities of items is bigger than initial values:
+      Then Quantities of items are bigger than initial values:
       |6|
       |4|
       |8|
+      And Total with multiple values is calculated correctly
+      And Shopping cart link value equals sum of all quantities
+
+    @TC-411
+    Scenario: Decrease all item quantities
+      #Inputted quantities should be smaller than initial values
+      When I input new quantity values for products in cart:
+        |3|
+        |2|
+        |1|
+      And I click update shopping cart button
+      Then Quantities of items are smaller than initial values:
+        |6|
+        |4|
+        |8|
       And Total with multiple values is calculated correctly
       And Shopping cart link value equals sum of all quantities
