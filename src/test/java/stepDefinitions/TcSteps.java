@@ -110,7 +110,6 @@ public class TcSteps {
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("Log out")));
 
             assertTrue(driver.findElements(By.linkText("Log out")).size() > 0);
-
         }
     }
 
@@ -174,7 +173,7 @@ public class TcSteps {
 
     @Then("The Wishlist counter should increase by 1")
     public void wishlistCounterShouldIncreaseBy1() {
-        driver.navigate().refresh(); // чтобы обновить данные
+        driver.navigate().refresh();
 
         WebElement counter = driver.findElement(By.cssSelector("span.wishlist-qty"));
         String countText = counter.getText().replaceAll("[()]", "").trim();
