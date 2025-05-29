@@ -58,12 +58,12 @@ Feature: Wishlist functionality
   Scenario: Verify Wishlist Persistence After Logout and Login
     Given User is logged in
     And User adds the following items to the wishlist:
-      | 50's Rockabilly Polka Dot Top JR Plus Size |
+      |Smartphone|
     When User logs out
     And User is logged in
     And User opens the wishlist page
     Then The wishlist should contain the following items:
-      | 50's Rockabilly Polka Dot Top JR Plus Size |
+      |Smartphone|
 
 
 

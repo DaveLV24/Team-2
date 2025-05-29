@@ -82,7 +82,7 @@ public WishlistSteps() {
     }
     @When("User opens the wishlist page")
     public void open_wishlist_page() {
-        driver.findElement(By.linkText("Wishlist")).click();
+        driver.get("https://demowebshop.tricentis.com/wishlist");
     }
 
 
@@ -106,8 +106,8 @@ public WishlistSteps() {
         assertFalse(items.isEmpty());
     }
     @When("User selects the following items to add to cart:")
-    public void user_selects_multiple_items_to_add_to_cart(List<String> products) {
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+    public void user_selects_multiple_items_to_add_to_cart(List<String> products) throws Exception {
+        Thread.sleep(2000);
         for (String product : products) {
             WebElement row = driver.findElement(By.xpath("//td[@class='product']/a[contains(text(),\"" + product + "\")]/ancestor::tr"));
             WebElement checkbox = row.findElement(By.name("addtocart"));
