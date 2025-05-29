@@ -154,4 +154,12 @@ public class ShoppingCartLinkAndPageSteps {
     public void clickingRemoveCheckboxSingularItem(){
         driver.findElement(By.cssSelector("[name='removefromcart']")).click();
     }
+
+    @When("^I click remove checkbox beside each the product$")
+    public void clickingRemoveCheckboxEveryItem(){
+        List<WebElement> items =  driver.findElements(By.className("cart-item-row"));
+        for(WebElement item : items){
+            item.findElement(By.cssSelector("[name='removefromcart']")).click();
+        }
+    }
 }

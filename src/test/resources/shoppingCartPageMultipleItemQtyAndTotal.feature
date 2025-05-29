@@ -36,3 +36,11 @@ Feature: Shopping cart when multiple items are added quantity functionality and 
         |8|
       And Total with multiple values is calculated correctly
       And Shopping cart link value equals sum of all quantities
+      
+    @TC-414
+    Scenario: Removing all items from shopping cart
+      When I click remove checkbox beside each the product
+      And I click update shopping cart button
+      Then Message can be seen: "Your Shopping Cart is empty!"
+      And Shopping cart link value is 0
+
