@@ -101,10 +101,7 @@ public WishlistSteps() {
     @Then("The item should appear in the shopping cart")
     public void verify_item_in_cart() {
 
-        driver.findElement(By.className("ico-cart")).click();
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".cart")));
+        driver.get("https://demowebshop.tricentis.com/cart");
         List<WebElement> items = driver.findElements(By.cssSelector(".cart td.product"));
         assertFalse(items.isEmpty());
     }
