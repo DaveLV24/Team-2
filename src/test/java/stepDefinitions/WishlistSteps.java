@@ -1,5 +1,6 @@
 package stepDefinitions;
 import hooks.Hooks;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -91,6 +92,8 @@ public WishlistSteps() {
     public void open_wishlist_page() {
         driver.findElement(By.linkText("Wishlist")).click();
     }
+
+
     @And("User updates the wishlist")
     public void update_wishlist() {
         driver.findElement(By.name("updatecart")).click();
@@ -163,10 +166,7 @@ public WishlistSteps() {
         }
     }
 
-    @And("User updates the wishlist via button")
-    public void update_wishlist_button_click() {
-        driver.findElement(By.name("updatecart")).click();
-    }
+
 
     @Then("The selected items should appear in the shopping cart via update:")
     public void validate_items_in_cart_from_update(io.cucumber.datatable.DataTable dataTable) {
@@ -195,6 +195,27 @@ public WishlistSteps() {
             }
         }
     }
+
+    @When("User logs out")
+    public void user_logs_out() {
+        driver.findElement(By.linkText("Log out")).click();
+    }
+
+    @Then("The wishlist should contain the following items:")
+    public void wishlist_should_contain_items(io.cucumber.datatable.DataTable dataTable) {
+        List<String> expectedItems = dataTable.asList();
+
+        for (String item : expectedItems) {
+            List<WebElement> matches = driver.findElements(
+                    By.xpath("//td[@class='product']/a[contains(text(), \"" + item + "\")]")
+            );
+            boolean isPresent = matches.stream().anyMatch(WebElement::isDisplayed);
+            assertTrue("Expected item not found in wishlist: " + item, isPresent);
+        }
+    }
+
+
+
 
 
 }

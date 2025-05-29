@@ -65,3 +65,14 @@ Feature: Wishlist functionality
     And User updates the wishlist
     Then The selected items should appear in the shopping cart:
       | Phone Cover |
+
+  @TC-314
+  Scenario: Verify Wishlist Persistence After Logout and Login
+    Given User is logged in
+    And User adds the following items to the wishlist:
+      | 50's Rockabilly Polka Dot Top JR Plus Size |
+    When User logs out
+    And User is logged in
+    And User opens the wishlist page
+    Then The wishlist should contain the following items:
+      | 50's Rockabilly Polka Dot Top JR Plus Size |
