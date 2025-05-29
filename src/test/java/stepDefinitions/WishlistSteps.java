@@ -57,8 +57,7 @@ public WishlistSteps() {
         for (String product : products) {
             String urlPart = product.toLowerCase().replace(" ", "-").replaceAll("[^a-z0-9\\-]", "");
             driver.get("https://demowebshop.tricentis.com/" + urlPart);
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[value='Add to wishlist']")));
+            WebElement button = driver.findElement(By.cssSelector("input[value='Add to wishlist']"));
             button.click();
         }
     }
@@ -102,17 +101,16 @@ public WishlistSteps() {
     @Then("The item should appear in the shopping cart")
     public void verify_item_in_cart() {
 
-        driver.findElement(By.linkText("Shopping cart")).click();
+        driver.findElement(By.className("ico-cart")).click();
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        WebElement cartTable = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".cart")));
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".cart")));
         List<WebElement> items = driver.findElements(By.cssSelector(".cart td.product"));
-        assertFalse("Cart is empty, item was not added", items.isEmpty());
+        assertFalse(items.isEmpty());
     }
     @When("User selects the following items to add to cart:")
-    public void user_selects_multiple_items_to_add_to_cart(io.cucumber.datatable.DataTable dataTable) {
-        List<String> products = dataTable.asList();
-
+    public void user_selects_multiple_items_to_add_to_cart(List<String> products) {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         for (String product : products) {
             WebElement row = driver.findElement(By.xpath("//td[@class='product']/a[contains(text(),\"" + product + "\")]/ancestor::tr"));
             WebElement checkbox = row.findElement(By.name("addtocart"));
