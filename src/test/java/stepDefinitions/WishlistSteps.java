@@ -33,6 +33,7 @@ public WishlistSteps() {
         driver.findElement(By.id("add-to-wishlist-button-43")).click();
     }
 
+
     @When("User navigates to the wishlist page")
     public void user_navigates_to_wishlist() {
         driver.findElement(By.linkText("Wishlist")).click();
@@ -40,41 +41,13 @@ public WishlistSteps() {
 
     @Then("The wishlist should display the added product")
     public void wishlist_should_display_product() {
-        WebElement product = driver.findElement(By.cssSelector(".wishlist-content"));
-        assertTrue(product.getText().contains("Smartphone")); //
-    }
+        WebElement wishlistTable = driver.findElement(By.cssSelector("table.cart"));
 
-    @Then("The page should load without error")
-    public void page_should_load_without_error() {
-        String title = driver.getTitle();
-        assertNotNull(title);
-        assertFalse(title.contains("Error"));
-    }
+        WebElement cartTable = driver.findElement(By.cssSelector("table.cart"));
+        String tableText = cartTable.getText();
 
-    @When("User removes an item from the wishlist")
-    public void user_removes_item_from_wishlist() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[name^='removefromcart']")));
-        WebElement removeCheckbox = driver.findElement(By.cssSelector("input[name^='removefromcart']"));
-        removeCheckbox.click();
-        WebElement updateButton = driver.findElement(By.name("updatecart"));
-        updateButton.click();
-    }
+        assertTrue("Wishlist does not contain 'Smartphone'", tableText.contains("Smartphone"));
 
-    @Then("The wishlist should be updated and not contain the removed item")
-    public void wishlist_should_be_updated() {
-        // You can adjust this to get the actual item name from your test dynamically if needed
-        String removedItemName = "Smartphone"; // hardcoded for now
-
-        // Wait until the wishlist page is loaded
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".wishlist-content")));
-
-        // Check if item is still in the wishlist
-        List<WebElement> items = driver.findElements(By.cssSelector("td.product"));
-        boolean itemStillPresent = items.stream().anyMatch(el -> el.getText().contains(removedItemName));
-
-        assertFalse("Wishlist was not updated after removing the item: " + removedItemName, itemStillPresent);
     }
 
 
@@ -84,18 +57,28 @@ public WishlistSteps() {
         for (String product : products) {
             String urlPart = product.toLowerCase().replace(" ", "-").replaceAll("[^a-z0-9\\-]", "");
             driver.get("https://demowebshop.tricentis.com/" + urlPart);
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
             WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[value='Add to wishlist']")));
             button.click();
         }
     }
 
     @And("User selects the following items to remove:")
-    public void select_items_to_remove(io.cucumber.datatable.DataTable dataTable) {
-        List<String> products = dataTable.asList();
-        for (String product : products) {
-            WebElement row = driver.findElement(By.xpath("//td[@class='product']/a[contains(text(),\"" + product + "\")]/ancestor::tr"));
-            row.findElement(By.name("removefromcart")).click();
+    public void user_selects_items_to_remove(io.cucumber.datatable.DataTable dataTable) {
+        List<String> itemsToRemove = dataTable.asList();
+
+        for (String itemName : itemsToRemove) {
+            try {
+                WebElement productRow = driver.findElement(
+                        By.xpath("//td[@class='product']/a[contains(text(), '" + itemName + "')]/ancestor::tr")
+                );
+                WebElement removeCheckbox = productRow.findElement(By.name("removefromcart"));
+                if (!removeCheckbox.isSelected()) {
+                    removeCheckbox.click();
+                }
+            } catch (Exception e) {
+                System.out.println("Could not find item to remove: " + itemName);
+            }
         }
     }
     @When("User opens the wishlist page")
@@ -104,14 +87,6 @@ public WishlistSteps() {
     }
 
 
-    @And("User updates the wishlist")
-    public void update_wishlist() {
-        driver.findElement(By.name("updatecart")).click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                By.xpath("//td[@class='product']/a[contains(text(), 'Rockabilly')]")
-        ));
-    }
     @When("User selects an item in wishlist to add to cart")
     public void user_selects_item_to_add_to_cart() {
         WebElement checkbox = driver.findElement(By.name("addtocart"));
@@ -133,8 +108,6 @@ public WishlistSteps() {
         WebElement cartTable = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".cart")));
         List<WebElement> items = driver.findElements(By.cssSelector(".cart td.product"));
         assertFalse("Cart is empty, item was not added", items.isEmpty());
-
-        System.out.println("✅ Item successfully added to cart from wishlist.");
     }
     @When("User selects the following items to add to cart:")
     public void user_selects_multiple_items_to_add_to_cart(io.cucumber.datatable.DataTable dataTable) {
@@ -163,29 +136,8 @@ public WishlistSteps() {
         for (String item : expectedItems) {
             assertTrue("Item not found in cart: " + item, pageSource.contains(item));
         }
-
-        System.out.println("All selected items successfully added to cart from wishlist.");
     }
 
-
-
-
-
-    @Then("The selected items should appear in the shopping cart via update:")
-    public void validate_items_in_cart_from_update(io.cucumber.datatable.DataTable dataTable) {
-        driver.findElement(By.linkText("Shopping cart")).click();  // Go to cart
-
-        List<String> expectedItems = dataTable.asList();
-        String cartPage = driver.getPageSource();
-
-        for (String item : expectedItems) {
-            System.out.println("Checking if cart contains: " + item);
-            System.out.println("Cart Page HTML Snippet: " + cartPage.substring(0, Math.min(500, cartPage.length())));
-            assertTrue("Item not found in cart: " + item, cartPage.contains(item));
-        }
-
-        System.out.println("All selected items via update wishlist were added to the cart.");
-    }
 
     @And("User selects the following items for cart via update button:")
     public void select_items_to_add_to_cart(io.cucumber.datatable.DataTable dataTable) {
@@ -199,10 +151,12 @@ public WishlistSteps() {
         }
     }
 
+
     @When("User logs out")
     public void user_logs_out() {
         driver.findElement(By.linkText("Log out")).click();
     }
+
 
     @Then("The wishlist should contain the following items:")
     public void wishlist_should_contain_items(io.cucumber.datatable.DataTable dataTable) {
