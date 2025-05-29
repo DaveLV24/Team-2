@@ -7,7 +7,7 @@ Feature: Check visibility of Wish List link and item counter in Top Menu
     When User selects all products in the Wishlist
     And User clicks the "Update wishlist" button
     Then Wishlist should be empty after update
-    And User logs out
+    And User logs out from Wishlist
 
   Scenario: Check visibility of Wish List link and item counter in Top Menu
     Given User is logged in (or logs in if needed)
