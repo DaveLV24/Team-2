@@ -162,4 +162,22 @@ public class ShoppingCartLinkAndPageSteps {
             item.findElement(By.cssSelector("[name='removefromcart']")).click();
         }
     }
+
+    @When("^I click the remove checkbox beside these items:$")
+    public void clickingRemoveCheckboxOnSomeItems(List<String> itemUrlEnds){
+        for(String itemName : itemUrlEnds){
+            //Variable not needed, added for readability
+            WebElement actualItem = driver.findElement(By.xpath("//*[contains(@href, '"+itemName+"') and @class='product-name']/ancestor::tr"));
+            actualItem.findElement(By.cssSelector("[name='removefromcart']")).click();
+        }
+    }
+
+    @Then("^Removed items are no longer part of shopping cart:$")
+    public void checkMultipleItemsRemoved(List<String> itemUrlEnds){
+        WebElement shoppingCart = driver.findElement(By.className("cart"));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
+        for(String itemName : itemUrlEnds){
+            assertTrue(shoppingCart.findElements(By.xpath("//*[contains(@href, '"+itemName+"') and @class='product-name']/ancestor::tr")).isEmpty());
+        }
+    }
 }

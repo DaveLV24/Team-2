@@ -37,10 +37,21 @@ Feature: Shopping cart when multiple items are added quantity functionality and 
       And Total with multiple values is calculated correctly
       And Shopping cart link value equals sum of all quantities
       
-    @TC-414
+    @TC-418
     Scenario: Removing all items from shopping cart
       When I click remove checkbox beside each the product
       And I click update shopping cart button
       Then Message can be seen: "Your Shopping Cart is empty!"
       And Shopping cart link value is 0
 
+    @TC-419
+    Scenario: Removing some items from shopping cart
+      When I click the remove checkbox beside these items:
+        #url endings just like in background step
+        |smartphone|
+        |141-inch-laptop|
+      And I click update shopping cart button
+      Then Removed items are no longer part of shopping cart:
+        |smartphone|
+        |141-inch-laptop|
+      And Shopping cart link value equals sum of all quantities
