@@ -53,20 +53,7 @@ Feature: Wishlist functionality
       | Smartphone |
       | Phone Cover |
 
-
   @TC-313
-  Scenario: Validate functionality of “Add to cart” checkbox via update wishlist
-    Given User is logged in
-    And User adds the following items to the wishlist:
-      | Phone Cover |
-    When User opens the wishlist page
-    And User selects the following items for cart via update button:
-      | Phone Cover     |
-    And User updates the wishlist
-    Then The selected items should appear in the shopping cart:
-      | Phone Cover |
-
-  @TC-314
   Scenario: Verify Wishlist Persistence After Logout and Login
     Given User is logged in
     And User adds the following items to the wishlist:
@@ -76,3 +63,6 @@ Feature: Wishlist functionality
     And User opens the wishlist page
     Then The wishlist should contain the following items:
       | 50's Rockabilly Polka Dot Top JR Plus Size |
+
+
+

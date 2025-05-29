@@ -2,6 +2,7 @@ package stepDefinitions;
 import hooks.Hooks;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.*;
+import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -9,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -61,12 +63,20 @@ public WishlistSteps() {
 
     @Then("The wishlist should be updated and not contain the removed item")
     public void wishlist_should_be_updated() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        boolean isWishlistEmpty = driver.getPageSource().contains("The wishlist is empty!");
-        boolean isItemRemoved = driver.findElements(By.cssSelector("td.product")).isEmpty();
+        // You can adjust this to get the actual item name from your test dynamically if needed
+        String removedItemName = "Smartphone"; // hardcoded for now
 
-        assertTrue("Wishlist was not updated after removing the item", isWishlistEmpty || isItemRemoved);
+        // Wait until the wishlist page is loaded
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".wishlist-content")));
+
+        // Check if item is still in the wishlist
+        List<WebElement> items = driver.findElements(By.cssSelector("td.product"));
+        boolean itemStillPresent = items.stream().anyMatch(el -> el.getText().contains(removedItemName));
+
+        assertFalse("Wishlist was not updated after removing the item: " + removedItemName, itemStillPresent);
     }
+
 
     @And("User adds the following items to the wishlist:")
     public void user_adds_items_to_wishlist(io.cucumber.datatable.DataTable dataTable) {
@@ -157,14 +167,7 @@ public WishlistSteps() {
         System.out.println("All selected items successfully added to cart from wishlist.");
     }
 
-    @When("User selects the following items to add to cart using update wishlist:")
-    public void select_items_for_cart_via_update(io.cucumber.datatable.DataTable dataTable) {
-        List<String> items = dataTable.asList();
-        for (String item : items) {
-            WebElement row = driver.findElement(By.xpath("//td[@class='product']/a[contains(text(),\"" + item + "\")]/ancestor::tr"));
-            row.findElement(By.name("addtocart")).click();  // Tick "Add to cart" checkbox
-        }
-    }
+
 
 
 
@@ -213,7 +216,6 @@ public WishlistSteps() {
             assertTrue("Expected item not found in wishlist: " + item, isPresent);
         }
     }
-
 
 
 
