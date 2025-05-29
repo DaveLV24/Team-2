@@ -54,6 +54,8 @@ public class ShoppingCartLinkAndPageSteps {
 
     @Then("^Message can be seen: \"Your Shopping Cart is empty!\"$")
     public void checkShoppingCartEmpty(){
+        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("order-summary-content")));
         assertTrue(driver.findElement(By.className("order-summary-content")).isDisplayed());
         assertTrue(driver.findElement(By.className("order-summary-content")).getText().equals("Your Shopping Cart is empty!"));
     }
