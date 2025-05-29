@@ -1,6 +1,8 @@
 Feature: Wish List counter matches actual number of items
 
 Background: User is not logged-in and wishlist is empty
+
+  @TC-305
   Scenario: Clear all items from the Wishlist and log out
     Given User is logged in (or logs in if needed)
     And User is on the Wishlist page
@@ -9,7 +11,6 @@ Background: User is not logged-in and wishlist is empty
     Then Wishlist should be empty after update
     And User logs out
 
-@TC-305
   Scenario: Add 3 different products to Wish List and verify counter and contents
    When User opens product "Blue and green Sneaker" and adds quantity 1 to the Wishlist
    Then The Wishlist counter should increase by 1

@@ -1,5 +1,6 @@
 Feature: Check visibility of Wish List link and item counter in Top Menu
 
+  @TC-301
   Scenario: Clear all items from the Wishlist and log out
     Given User is logged in (or logs in if needed)
     And User is on the Wishlist page
@@ -8,7 +9,6 @@ Feature: Check visibility of Wish List link and item counter in Top Menu
     Then Wishlist should be empty after update
     And User logs out
 
-  @TC-301
   Scenario: Check visibility of Wish List link and item counter in Top Menu
     Given User is logged in (or logs in if needed)
     And No items are added to the Wishlist

@@ -26,6 +26,7 @@ public class TcSteps {
     private final String email = "kirils.lebeds@gmail.com";
     private final String password = "1q2w3e";
 
+
     @Given("User is on the Wishlist page")
     public void userIsOnTheWishlistPage() {
         driver.get("https://demowebshop.tricentis.com/wishlist");
@@ -143,6 +144,11 @@ public class TcSteps {
     @Given("User is on a \"Blue and green Sneaker\" page")
     public void userAddsBlueAndGreenSneakers() {
         driver.get("https://demowebshop.tricentis.com/blue-and-green-sneaker");
+    }
+
+    @Given("User is on a \"Smartphone\" page")
+    public void userAddsSmartphone() {
+        driver.get("https://demowebshop.tricentis.com/Smartphone");
     }
 
     @Given("User is on a \"Black and white diamond heart\" page")

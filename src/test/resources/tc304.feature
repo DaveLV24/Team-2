@@ -1,6 +1,8 @@
 Feature: View multiple items in Wish List
 
   Background: User is not logged-in and wishlist is empty
+
+  @TC-304
   Scenario: Clear all items from the Wishlist and log out
     Given User is logged in (or logs in if needed)
     And User is on the Wishlist page
@@ -9,7 +11,6 @@ Feature: View multiple items in Wish List
     Then Wishlist should be empty after update
     And User logs out
 
-@TC-304
   Scenario Outline: Add multiple products to Wishlist and verify content
     Given User is logged in (or logs in if needed)
     When User opens product "<product1>" and adds quantity <qty1> to the Wishlist
@@ -19,5 +20,5 @@ Feature: View multiple items in Wish List
       | <product1>            |  <qty1>   |
       | <product2>            |  <qty2>   |
     Examples:
-      | product1              | qty1  |product2                     | qty2 |
+      | product1              | qty1  | product2                    | qty2 |
       | Blue and green Sneaker| 1     | Black & White Diamond Heart | 4    |
