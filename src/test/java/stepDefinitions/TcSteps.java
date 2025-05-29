@@ -1,8 +1,10 @@
 package stepDefinitions;
 
 import hooks.Hooks;
-import io.cucumber.java.en.*;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -75,7 +77,7 @@ public class TcSteps {
         assertTrue("Wishlist is not empty after update", wishlistText.contains("the wishlist is empty"));
     }
 
-    @Then("User logs out")
+    @Then("User logs out from Wishlist")
     public void userLogsOut() {
         WebElement logoutLink = driver.findElement(By.cssSelector("a.ico-logout"));
         logoutLink.click();
@@ -277,5 +279,22 @@ public class TcSteps {
         WebElement counter = driver.findElement(By.cssSelector("span.wishlist-qty"));
         String actualText = counter.getText().replaceAll("[()]", "").trim();
         assertEquals(expectedText, actualText);
+    }
+
+    @When("User opens the Wishlist page")
+    public void userOpensTheWishlistPage() {
+        driver.get("https://demowebshop.tricentis.com/wishlist");
+    }
+
+    @Then("The URL should be {string}")
+    public void theURLShouldBe(String expectedUrl) {
+        String currentUrl = driver.getCurrentUrl();
+        assertEquals("URL mismatch", expectedUrl, currentUrl);
+    }
+
+    @Then("The Wishlist page title should be \"Wishlist\"")
+    public void theWishlistPageTitleShouldBe() {
+        String pageTitle = driver.findElement(By.cssSelector("div.page-title h1")).getText().trim();
+        assertEquals("Title mismatch", "Wishlist", pageTitle);
     }
 }

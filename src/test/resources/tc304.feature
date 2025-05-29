@@ -9,7 +9,7 @@ Feature: View multiple items in Wish List
     When User selects all products in the Wishlist
     And User clicks the "Update wishlist" button
     Then Wishlist should be empty after update
-    And User logs out
+    And User logs out from Wishlist
 
   Scenario Outline: Add multiple products to Wishlist and verify content
     Given User is logged in (or logs in if needed)

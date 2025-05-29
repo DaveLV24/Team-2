@@ -9,7 +9,7 @@ Background: User is not logged-in and wishlist is empty
     When User selects all products in the Wishlist
     And User clicks the "Update wishlist" button
     Then Wishlist should be empty after update
-    And User logs out
+    And User logs out from Wishlist
 
   Scenario: Add 3 different products to Wish List and verify counter and contents
    When User opens product "Blue and green Sneaker" and adds quantity 1 to the Wishlist
