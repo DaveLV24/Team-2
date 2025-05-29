@@ -59,8 +59,8 @@ public class ShoppingCartSteps {
 
     @Then("^message \"([^\"]*)\" is displayed$")
     public void successMessage(String message){
-        WebDriverWait wait = (WebDriverWait) new WebDriverWait(driver, Duration.ofSeconds(10)).ignoring(StaleElementReferenceException.class);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("bar-notification")));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.id("bar-notification")));
 
         assertEquals(message, driver.findElement(By.xpath("//*[@id='bar-notification']/p")).getText());
     }
