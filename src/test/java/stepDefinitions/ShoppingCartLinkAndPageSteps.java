@@ -149,4 +149,9 @@ public class ShoppingCartLinkAndPageSteps {
             assertTrue(Integer.parseInt(item.findElement(By.className("qty-input")).getAttribute("value"))<oldQuantities.get(items.indexOf(item)));
         }
     }
+
+    @When("^I click remove checkbox beside the product$")
+    public void clickingRemoveCheckboxSingularItem(){
+        driver.findElement(By.cssSelector("[name='removefromcart']")).click();
+    }
 }

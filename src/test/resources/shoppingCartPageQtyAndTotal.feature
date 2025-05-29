@@ -41,3 +41,10 @@ Feature: Shopping cart item quantity functionality and total price calculations
     And I click update shopping cart button
     Then Message can be seen: "Your Shopping Cart is empty!"
     And Shopping cart link value is 0
+
+  @TC-413
+  Scenario: Remove single item from shopping cart
+    When I click remove checkbox beside the product
+    And I click update shopping cart button
+    Then Message can be seen: "Your Shopping Cart is empty!"
+    And Shopping cart link value is 0
