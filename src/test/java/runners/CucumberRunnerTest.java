@@ -12,7 +12,8 @@ import io.cucumber.junit.CucumberOptions;
         plugin = {
                 "pretty",
                 "json:target/cucumber.json",
-                "html:target/cucumber-html-report.html"
+                "html:target/cucumber-html-report.html",
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         },
         // feature word - provides location of feature file
         features = "src/test/resources",

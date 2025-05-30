@@ -5,6 +5,7 @@ import io.cucumber.java.an.E;
 import io.cucumber.java.en.*;
 import io.cucumber.java.sl.In;
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -54,7 +55,7 @@ public class ShoppingCartLinkAndPageSteps {
 
     @Then("^Message can be seen: \"Your Shopping Cart is empty!\"$")
     public void checkShoppingCartEmpty(){
-        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait = (WebDriverWait) new WebDriverWait(driver, Duration.ofSeconds(5)).ignoring(StaleElementReferenceException.class);
         wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("order-summary-content")));
         assertTrue(driver.findElement(By.className("order-summary-content")).isDisplayed());
         assertTrue(driver.findElement(By.className("order-summary-content")).getText().equals("Your Shopping Cart is empty!"));
